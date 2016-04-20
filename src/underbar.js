@@ -103,6 +103,19 @@
 
   // Produce a duplicate-free version of the array.
   _.uniq = function(array) {
+    //use each to add values that pass a duplicate test
+    // test will check whether indexOf value is === -1 in new array.
+    //return new array
+    var singlesAry = [];
+
+    _.each(array, function(value) {
+      if(_.indexOf(singlesAry,value) === -1) {
+        singlesAry.push(value);
+      }
+    });
+
+    return singlesAry;
+
   };
 
 
