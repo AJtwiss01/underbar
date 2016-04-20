@@ -177,13 +177,12 @@
     //create start value set to accumulator
     var start = accumulator;
 
-    //loop through all values using each. For each iteration, if start is undefined, set start to current value.
+    //loop through all values using each. For each iteration, if start is undefined, set accumulator to current value and nullify start.
     //otherwise, run iterator on current value and start.
     _.each(collection,function(val,index,collection) {
       if(start === undefined) {
         start = null;
         accumulator = val;
-
       }
 
       else {
@@ -210,12 +209,32 @@
   // Determine whether all of the elements match a truth test.
   _.every = function(collection, iterator) {
     // TIP: Try re-using reduce() here.
+    //return reduce and pass collection, a function(allPass?,val), and true (this is accum/allPass)
+    //in func: if accum is true, return iterator(val)
+    if (iterator === undefined) {
+      iterator = _.identity;
+    }
+
+    return !!_.reduce(collection, function(allPass, val) {
+      if (allPass) {
+        return iterator(val);
+      }
+    },true);
+
   };
 
   // Determine whether any of the elements pass a truth test. If no iterator is
   // provided, provide a default one
   _.some = function(collection, iterator) {
     // TIP: There's a very clever way to re-use every() here.
+    // only time some is false is if all elems fail. Thus, we'll want some sort of return every(collection,!iterator).
+      if (iterator === undefined) {
+        iterator = _.identity;
+      }
+    return !_.every(collection, function(val) {
+
+        return !iterator(val);
+    });
   };
 
 
