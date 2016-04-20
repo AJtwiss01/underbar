@@ -186,7 +186,7 @@
       }
 
       else {
-        accumulator = iterator(accumulator,val);
+        accumulator = iterator(accumulator,val,index,collection);
       }
     });
 
@@ -257,11 +257,48 @@
   //     bla: "even more stuff"
   //   }); // obj1 now contains key1, key2, key3 and bla
   _.extend = function(obj) {
+    //use each to iterate through arguments.
+    //use each again to iterate through all keys within each argument.
+    //at each key iteration, call obj[key] = key value.
+
+      var capture = null;
+
+      _.each(arguments, function(val, key, collection) {
+        if (capture === null) {
+          capture = val; //val should be obj
+        }
+
+        else {
+          _.each(val, function(objVal,objKey,objAll) {
+            capture[objKey] = objVal;
+          });
+        }
+      });
+
+      return capture;
+
   };
 
   // Like extend, but doesn't ever overwrite a key that already
   // exists in obj
   _.defaults = function(obj) {
+    var capture = null;
+
+    _.each(arguments, function(val, key, collection) {
+      if (capture === null) {
+        capture = val; //val should be obj
+      }
+
+      else {
+        _.each(val, function(objVal,objKey,objAll) {
+          if (capture[objKey] === undefined) {
+            capture[objKey] = objVal;
+          }
+        });
+      }
+    });
+
+      return capture;
   };
 
 
