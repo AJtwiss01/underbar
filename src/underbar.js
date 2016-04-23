@@ -342,6 +342,37 @@
   // already computed the result for the given argument and return that value
   // instead if possible.
   _.memoize = function(func) {
+
+    /* How I wanted to do, but had trouble with:
+    Issue is that I am not reusing the scope of the closure from previous function calls with same arg sets.
+    This is happening because I have once being returned from my memFunc function, using the passed arguments.
+    Next time I call memFunc, no matter the args, it will return a new once with a new scope.
+    What I would need to do is create a once with a scope that is reused per arg set. Unsure if this is possible or even convenient.
+
+    return function() {
+
+      return _.once(func).apply(this,arguments);
+    };
+    */
+
+    //create array to which we can pass past arg sets.
+    var pastArgs = [];
+    var pastResults = [];
+
+    return function() {
+      var argString = JSON.stringify(arguments);
+      var argIndex = _.indexOf(pastArgs,argString);
+    //only compute result if arguments weren't passed previously. 
+      if (argIndex === -1) {
+        pastResults.push(func.apply(this, arguments));
+        pastArgs.push(argString);
+        argIndex = _.indexOf(pastArgs,argString);
+      }
+
+    //always return the result regardless of when computed.
+    return pastResults[argIndex];
+    };
+
   };
 
   // Delays a function for the given number of milliseconds, and then calls
@@ -351,6 +382,10 @@
   // parameter. For example _.delay(someFunction, 500, 'a', 'b') will
   // call someFunction('a', 'b') after 500ms
   _.delay = function(func, wait) {
+    var extraArgs = [].slice.call(arguments,2);
+    return setTimeout(function() {
+      func.apply(null,extraArgs);
+    },wait);
   };
 
 
