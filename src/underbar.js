@@ -400,6 +400,20 @@
   // input array. For a tip on how to make a copy of an array, see:
   // http://mdn.io/Array.prototype.slice
   _.shuffle = function(array) {
+    var copyAry = array.slice();
+    var randAry = [];
+    var randIndex;
+    var randValue;
+    
+    //loop while copyAry isn't empty. push random index to randAry each iteration, while popping .
+    while(copyAry.length > 0) {
+      randIndex = Math.floor(Math.random() * (copyAry.length));
+      randValue = copyAry.splice(randIndex,1)[0];
+      randAry.push(randValue);
+    }
+
+    return randAry;
+
   };
 
 
