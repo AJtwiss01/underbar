@@ -84,8 +84,8 @@
   // Return all elements of an array that pass a truth test.
   _.filter = function(collection, test) {
     var passers = [];
-    _.each(collection, function(value) {
-      if(test(value)) {
+    _.each(collection, function(value,index,collection) {
+      if(test(value,index,collection)) {
         passers.push(value);
       }
     });
@@ -106,16 +106,12 @@
     //use each to add values that pass a duplicate test
     // test will check whether indexOf value is === -1 in new array.
     //return new array
-    var singlesAry = [];
 
-    _.each(array, function(value) {
-      if(_.indexOf(singlesAry,value) === -1) {
-        singlesAry.push(value);
+    return _.filter(array, function(value,index,collection) {
+      if(_.indexOf(array.slice(0,index),value) === -1) {
+        return true;
       }
     });
-
-    return singlesAry;
-
   };
 
 
