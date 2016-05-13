@@ -460,6 +460,15 @@
   // Example:
   // _.zip(['a','b','c','d'], [1,2,3]) returns [['a',1], ['b',2], ['c',3], ['d',undefined]]
   _.zip = function() {
+    var collection = _.sortBy(Array.prototype.slice.call(arguments),function(i) {
+     return -1 * i.length;
+    });
+
+    return _.reduce(collection, function(accum, valAry, indAry) {
+      return _.map(accum, function(val, ind) {
+        return Array.prototype.concat(accum[ind],valAry[ind]);
+      });
+    });
   };
 
   // Takes a multidimensional array and converts it to a one-dimensional array.
