@@ -427,7 +427,13 @@
 
     if (typeof functionOrKey === 'string') {
       return _.map(collection, function(value) {
+        if (typeof value[functionOrKey] === 'function') {
           return value[functionOrKey].apply(value,args);
+        }
+
+        else {
+          return value[functionOrKey];
+        }
       });
     }
 
@@ -443,9 +449,8 @@
   // of that string. For example, _.sortBy(people, 'name') should sort
   // an array of people by their name.
   _.sortBy = function(collection, iterator) {
- //   return _.map(collection, function(value) {
-   //   if 
 
+    return collection.sort(function(a,b) {return (a[iterator] || iterator(a)) > (b[iterator] || iterator(b))});
 
   };
 
